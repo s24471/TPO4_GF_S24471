@@ -12,9 +12,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.Temporal;
-import java.util.Date;
 import java.util.Locale;
-import java.util.Objects;
 
 public class Time {
     public static String passed(String from, String to) {
@@ -36,10 +34,10 @@ public class Time {
             LocalDate fromDate = LocalDate.from(fromTemporal);
             LocalDate toDate = LocalDate.from(toTemporal);
             if (from.split("-")[1].equals("02") && from.split("-")[2].equals("29") && !fromDate.isLeapYear()) {
-                return ("*** java.time.format.DateTimeParseException: Text '"+from+"' could not be parsed: Invalid date 'February 29' as '" + fromDate.getYear() + "' is not a leap year");
+                return ("*** java.time.format.DateTimeParseException: Text '" + from + "' could not be parsed: Invalid date 'February 29' as '" + fromDate.getYear() + "' is not a leap year");
             }
             if (to.split("-")[1].equals("02") && to.split("-")[2].equals("29") && !toDate.isLeapYear()) {
-                return ("*** java.time.format.DateTimeParseException: Text '"+to+"' could not be parsed: Invalid date 'February 29' as '" + toDate.getYear() + "' is not a leap year");
+                return ("*** java.time.format.DateTimeParseException: Text '" + to + "' could not be parsed: Invalid date 'February 29' as '" + toDate.getYear() + "' is not a leap year");
             }
             return generateTimeReport(fromTemporal, toTemporal);
         } catch (
@@ -75,14 +73,13 @@ public class Time {
         ZonedDateTime convertedZonedDateTime;
         LocalDate fromDate;
         LocalDate toDate;
-        if(from instanceof LocalDateTime && to instanceof LocalDateTime) {
+        if (from instanceof LocalDateTime && to instanceof LocalDateTime) {
             zone = ZoneId.systemDefault();
             zonedDateTime = ZonedDateTime.now();
             convertedZonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.of("Europe/Warsaw"));
             fromDate = LocalDate.from(((LocalDateTime) from).atZone(ZoneId.from(convertedZonedDateTime)));
             toDate = LocalDate.from(((LocalDateTime) to).atZone(ZoneId.from(convertedZonedDateTime)));
-        }
-        else {
+        } else {
             zone = ZoneId.systemDefault();
             zonedDateTime = ZonedDateTime.now();
             convertedZonedDateTime = zonedDateTime.withZoneSameInstant(ZoneId.of("Europe/Warsaw"));
@@ -138,10 +135,12 @@ public class Time {
 
 
     }
+
     public static String now() {
         LocalDateTime currentTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
         return currentTime.format(formatter);
     }
+
 
 }

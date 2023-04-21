@@ -1,3 +1,9 @@
+/**
+ *
+ *  @author Gocławski Filip S24471
+ *
+ */
+
 package zad1;
 
 import java.io.IOException;
@@ -88,14 +94,14 @@ public class Server {
                 //message.append
                 String r = (new String(buffer.array(), 0, bytesRead));
                 //System.out.println(message.toString());
-               // String[] requests = message.toString().split("\n");
+                // String[] requests = message.toString().split("\n");
                 //for (String request : requests) {
-                    //System.out.println("request " + r.trim() +"#");
-                    String response = processRequest(client, r.trim());
-                    buffer.clear();
-                    buffer.put(response.getBytes());
-                    buffer.flip();
-                    client.write(buffer);
+                //System.out.println("request " + r.trim() +"#");
+                String response = processRequest(client, r.trim());
+                buffer.clear();
+                buffer.put(response.getBytes());
+                buffer.flip();
+                client.write(buffer);
                 //System.out.println("send");
                 //}
                 message.setLength(0);
@@ -111,11 +117,10 @@ public class Server {
     }
 
 
-
     private String processRequest(SocketChannel client, String request2) {
         //System.out.println(request2);
         StringBuilder request = new StringBuilder();
-        for(int i =1; i<request2.split(" ").length; i++)
+        for (int i = 1; i < request2.split(" ").length; i++)
             request.append(request2.split(" ")[i]).append(" ");
         request = new StringBuilder(request.toString().trim());
         String response;
@@ -124,21 +129,21 @@ public class Server {
             String id = request.toString().split(" ")[1];
             clientLogs.put(client, new StringBuilder("=== " + id + " log start ===\nlogged in\n"));
             response = "logged in";
-            serverLog.append(id +" logged in at " + Time.now() + '\n');
+            serverLog.append(id + " logged in at " + Time.now() + '\n');
         } else if (request.toString().startsWith("bye")) {
             StringBuilder clientLog = clientLogs.get(client);
             response = clientLog.toString() + "logged out\n=== " + clientLog.toString().split(" ")[1] + " log end ===\n";
             clientLogs.remove(client);
 
-            serverLog.append(clientLog.toString().split(" ")[1] +" logged out at " + Time.now() + '\n');
+            serverLog.append(clientLog.toString().split(" ")[1] + " logged out at " + Time.now() + '\n');
 
-            if(request.toString().equals("bye")){
+            if (request.toString().equals("bye")) {
                 return "logged out";
             }
 
         } else {
             StringBuilder clientLog = clientLogs.get(client);
-            serverLog.append(clientLog.toString().split(" ")[1] +" requested at " + Time.now() + " \"" + request +"\"\n");
+            serverLog.append(clientLog.toString().split(" ")[1] + " requested at " + Time.now() + " \"" + request + "\"\n");
             clientLog.append("Request: " + request + "\n");
             response = Time.passed(request.toString().split(" ")[0], request.toString().split(" ")[1]);
             clientLog.append("Result:\n" + response);
