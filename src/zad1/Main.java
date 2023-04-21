@@ -36,11 +36,10 @@ public class Main {
         es.execute(ctask);
       } else {
         c.connect();
-        System.out.println("con");
+        //System.out.println("con");
         c.send("login " + id);
-        System.out.println("send");
+        //System.out.println("send");
         for(String req : reqList) {
-          System.out.println(req);
           String res = c.send(req);
           if (showRes) System.out.println(res);
         }
@@ -54,7 +53,7 @@ public class Main {
         try {
           String log = task.get();
           clogs.add(log);
-        } catch (InterruptedException | ExecutionException exc) {
+        } catch (InterruptedException exc) {
           System.out.println(exc);
         }
       });

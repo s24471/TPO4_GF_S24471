@@ -1,15 +1,7 @@
-/**
- *
- *  @author Gocławski Filip S24471
- *
- */
-
 package zad1;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutionException;
 
 public class ClientTask implements Runnable {
 
@@ -17,14 +9,14 @@ public class ClientTask implements Runnable {
     private final List<String> requests;
     private final boolean showSendRes;
     String log;
+
     public ClientTask(Client client, List<String> requests, boolean showSendRes) {
         this.client = client;
         this.requests = requests;
         this.showSendRes = showSendRes;
     }
 
-
-    public void run()  {
+    public void run() {
         StringBuilder log = new StringBuilder();
         try {
             System.out.println("logged?");
@@ -51,7 +43,7 @@ public class ClientTask implements Runnable {
         this.log = log.toString();
     }
 
-    public String get() throws InterruptedException, ExecutionException {
+    public String get() throws InterruptedException {
         return log;
     }
 

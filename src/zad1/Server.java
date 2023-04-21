@@ -77,43 +77,62 @@ public class Server {
 
     private void handleClientRequest(SocketChannel client) throws IOException {
         ByteBuffer buffer = ByteBuffer.allocate(1024);
-        int bytesRead = client.read(buffer);
+        StringBuilder message = new StringBuilder();
 
-        if (bytesRead > 0) {
-            buffer.flip();
-            String request = new String(buffer.array(), 0, bytesRead);
-            String response = processRequest(client, request);
+        while (true) {
             buffer.clear();
-            buffer.put(response.getBytes());
-            buffer.flip();
-            client.write(buffer);
-        } else if (bytesRead < 0) {
-            //serverLog.append(client.getRemoteAddress().toString() + " logged out at " + Time.now() + "\n");
-            clientLogs.remove(client);
-            client.close();
+            int bytesRead = client.read(buffer);
+
+            if (bytesRead > 0) {
+                buffer.flip();
+                //message.append
+                String r = (new String(buffer.array(), 0, bytesRead));
+                //System.out.println(message.toString());
+               // String[] requests = message.toString().split("\n");
+                //for (String request : requests) {
+                    //System.out.println("request " + r.trim() +"#");
+                    String response = processRequest(client, r.trim());
+                    buffer.clear();
+                    buffer.put(response.getBytes());
+                    buffer.flip();
+                    client.write(buffer);
+                //System.out.println("send");
+                //}
+                message.setLength(0);
+            } else if (bytesRead == 0) {
+                break;
+            } else {
+                //serverLog.append(client.getRemoteAddress().toString() + " logged out at " + Time.now() + "\n");
+                clientLogs.remove(client);
+                client.close();
+                break;
+            }
         }
     }
 
+
+
     private String processRequest(SocketChannel client, String request2) {
-        String request = "";
+        //System.out.println(request2);
+        StringBuilder request = new StringBuilder();
         for(int i =1; i<request2.split(" ").length; i++)
-            request += request2.split(" ")[i] + " ";
-        request = request.trim();
+            request.append(request2.split(" ")[i]).append(" ");
+        request = new StringBuilder(request.toString().trim());
         String response;
         //System.out.println("r: " + request);
-        if (request.startsWith("login")) {
-            String id = request.split(" ")[1];
+        if (request.toString().startsWith("login")) {
+            String id = request.toString().split(" ")[1];
             clientLogs.put(client, new StringBuilder("=== " + id + " log start ===\nlogged in\n"));
             response = "logged in";
             serverLog.append(id +" logged in at " + Time.now() + '\n');
-        } else if (request.startsWith("bye")) {
+        } else if (request.toString().startsWith("bye")) {
             StringBuilder clientLog = clientLogs.get(client);
             response = clientLog.toString() + "logged out\n=== " + clientLog.toString().split(" ")[1] + " log end ===\n";
             clientLogs.remove(client);
 
             serverLog.append(clientLog.toString().split(" ")[1] +" logged out at " + Time.now() + '\n');
 
-            if(request.equals("bye")){
+            if(request.toString().equals("bye")){
                 return "logged out";
             }
 
@@ -121,7 +140,7 @@ public class Server {
             StringBuilder clientLog = clientLogs.get(client);
             serverLog.append(clientLog.toString().split(" ")[1] +" requested at " + Time.now() + " \"" + request +"\"\n");
             clientLog.append("Request: " + request + "\n");
-            response = Time.passed(request.split(" ")[0], request.split(" ")[1]);
+            response = Time.passed(request.toString().split(" ")[0], request.toString().split(" ")[1]);
             clientLog.append("Result:\n" + response);
         }
         //System.out.println("res " + response);
