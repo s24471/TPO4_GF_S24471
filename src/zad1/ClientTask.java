@@ -21,7 +21,7 @@ public class ClientTask extends FutureTask<String> implements Runnable {
             StringBuilder log = new StringBuilder();
             try {
                 client.connect();
-                log.append(client.send("login " + client.id)).append("\n");
+                client.send("login " + client.id);
                 for (String req : requests) {
                     String res = client.send(req);
                     if (showSendRes) {

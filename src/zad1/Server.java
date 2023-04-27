@@ -38,8 +38,10 @@ public class Server {
     public void startServer() {
         try {
             serverSocketChannel = ServerSocketChannel.open();
-            serverSocketChannel.bind(new InetSocketAddress(host, port));
             serverSocketChannel.configureBlocking(false);
+            serverSocketChannel.socket().setReuseAddress(true);
+            serverSocketChannel.bind(new InetSocketAddress(host, port));
+
             selector = Selector.open();
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
             executorService = Executors.newSingleThreadExecutor();
@@ -132,7 +134,7 @@ public class Server {
             serverLog.append(id + " logged in at " + Time.now() + '\n');
         } else if (request.toString().startsWith("bye")) {
             StringBuilder clientLog = clientLogs.get(client);
-            response = clientLog.toString() + "logged out\n=== " + clientLog.toString().split(" ")[1] + " log end ===\n";
+            response = clientLog.toString() + "logged out\n=== " + clientLog.toString().split(" ")[1] + " log end ===";
             clientLogs.remove(client);
 
             serverLog.append(clientLog.toString().split(" ")[1] + " logged out at " + Time.now() + '\n');

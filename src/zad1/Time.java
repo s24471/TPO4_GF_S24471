@@ -57,7 +57,7 @@ public class Time {
         String ans = "";
         ans += (period.getYears() == 1 ? period.getYears() + " rok" : period.getYears() > 1 ? (period.getYears() > 4 ? period.getYears() + " lat" : period.getYears() + " lata") : "");
         if (period.getYears() > 0 && (period.getMonths() > 0 || period.getDays() > 0)) ans += ", ";
-        ans += (period.getMonths() == 1 ? period.getMonths() + " miesiąc" : period.getMonths() > 1 ? period.getMonths() + " miesiące" : "");
+        ans += (period.getMonths() == 1 ? period.getMonths() + " miesiąc" : period.getMonths() >= 5 ? period.getMonths() + " miesięcy" : (period.getMonths() > 1?period.getMonths() + " miesiące":  ""));
         if (period.getMonths() > 0 && period.getDays() > 0) ans += ", ";
         ans += (period.getDays() == 1 ? period.getDays() + " dzień" : period.getDays() > 1 ? period.getDays() + " dni" : "");
 

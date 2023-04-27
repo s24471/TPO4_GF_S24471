@@ -44,7 +44,8 @@ public class Main {
                 String clog = c.send("bye and log transfer");
                 System.out.println(clog);
             }
-        });
+        })
+        ;
 
         if (concur) {
             ctasks.forEach( task -> {
